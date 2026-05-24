@@ -1,659 +1,778 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mi Voz – Tablero AAC</title>
-    <link rel="manifest" href="./manifest.json" />
-    <meta name="theme-color" content="#4D96FF" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="apple-mobile-web-app-title" content="Mi Voz" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&family=Nunito+Sans:wght@400;600&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      :root {
-        --bg: #fff9f0;
-        --card: #ffffff;
-        --accent1: #ff6b6b;
-        --accent2: #ffd93d;
-        --accent3: #6bcb77;
-        --accent4: #4d96ff;
-        --accent5: #ff9f45;
-        --accent6: #c77dff;
-        --text-dark: #1a1a2e;
-        --text-mid: #444;
-        --phrase-bg: #1a1a2e;
-        --phrase-text: #fff9f0;
-        --radius: 20px;
-        --shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
-      }
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi Voz – Tablero AAC</title>
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#4D96FF">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Mi Voz">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;900&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FFF9F0;
+    --card: #FFFFFF;
+    --accent1: #FF6B6B;
+    --accent2: #FFD93D;
+    --accent3: #6BCB77;
+    --accent4: #4D96FF;
+    --accent5: #FF9F45;
+    --accent6: #C77DFF;
+    --text-dark: #1A1A2E;
+    --text-mid: #444;
+    --phrase-bg: #1A1A2E;
+    --phrase-text: #FFF9F0;
+    --radius: 20px;
+    --shadow: 0 6px 24px rgba(0,0,0,0.12);
+  }
 
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-      body {
-        background: var(--bg);
-        font-family: "Nunito Sans", sans-serif;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 16px;
-        gap: 16px;
-      }
+  body {
+    background: var(--bg);
+    font-family: 'Nunito Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px;
+    gap: 16px;
+  }
 
-      /* ── HEADER ── */
-      header {
-        width: 100%;
-        max-width: 900px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-      }
-      header .logo {
-        font-family: "Nunito", sans-serif;
-        font-weight: 900;
-        font-size: 2rem;
-        color: var(--accent4);
-        letter-spacing: -1px;
-      }
-      header .logo span {
-        color: var(--accent1);
-      }
-      header .subtitle {
-        font-size: 0.95rem;
-        color: var(--text-mid);
-        font-weight: 600;
-      }
+  /* ── HEADER ── */
+  header {
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  header .logo {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 2rem;
+    color: var(--accent4);
+    letter-spacing: -1px;
+  }
+  header .logo span { color: var(--accent1); }
+  header .subtitle {
+    font-size: 0.95rem;
+    color: var(--text-mid);
+    font-weight: 600;
+  }
 
-      /* ── BARRA DE FRASE ── */
-      #phrase-bar {
-        width: 100%;
-        max-width: 900px;
-        background: var(--phrase-bg);
-        border-radius: var(--radius);
-        padding: 14px 18px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        min-height: 72px;
-        flex-wrap: wrap;
-        box-shadow: var(--shadow);
-        position: relative;
-      }
-      #phrase-bar .placeholder {
-        color: rgba(255, 249, 240, 0.35);
-        font-size: 1.05rem;
-        font-family: "Nunito", sans-serif;
-        font-weight: 700;
-        user-select: none;
-      }
-      .word-chip {
-        background: var(--accent2);
-        color: var(--text-dark);
-        padding: 8px 14px;
-        border-radius: 50px;
-        font-family: "Nunito", sans-serif;
-        font-weight: 900;
-        font-size: 1.1rem;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        cursor: pointer;
-        animation: popIn 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
-        transition: transform 0.1s;
-      }
-      .word-chip:hover {
-        transform: scale(1.05);
-      }
-      .word-chip .chip-emoji {
-        font-size: 1.2rem;
-      }
-      @keyframes popIn {
-        from {
-          transform: scale(0.6);
-          opacity: 0;
-        }
-        to {
-          transform: scale(1);
-          opacity: 1;
-        }
-      }
+  /* ── BARRA DE FRASE ── */
+  #phrase-bar {
+    width: 100%;
+    max-width: 900px;
+    background: var(--phrase-bg);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 72px;
+    flex-wrap: wrap;
+    box-shadow: var(--shadow);
+    position: relative;
+  }
+  #phrase-bar .placeholder {
+    color: rgba(255,249,240,0.35);
+    font-size: 1.05rem;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    user-select: none;
+  }
+  .word-chip {
+    background: var(--accent2);
+    color: var(--text-dark);
+    padding: 8px 14px;
+    border-radius: 50px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    animation: popIn 0.18s cubic-bezier(.34,1.56,.64,1);
+    transition: transform 0.1s;
+  }
+  .word-chip:hover { transform: scale(1.05); }
+  .word-chip .chip-emoji { font-size: 1.2rem; }
+  @keyframes popIn {
+    from { transform: scale(0.6); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+  }
 
-      /* ── CONTROLES DE FRASE ── */
-      #controls {
-        width: 100%;
-        max-width: 900px;
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-      }
-      .ctrl-btn {
-        flex: 1;
-        min-width: 120px;
-        padding: 14px 10px;
-        border: none;
-        border-radius: var(--radius);
-        font-family: "Nunito", sans-serif;
-        font-weight: 900;
-        font-size: 1rem;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-        transition:
-          transform 0.12s,
-          box-shadow 0.12s;
-        box-shadow: var(--shadow);
-      }
-      .ctrl-btn:active {
-        transform: scale(0.95);
-      }
-      #btn-speak {
-        background: var(--accent3);
-        color: #fff;
-        font-size: 1.1rem;
-      }
-      #btn-clear {
-        background: var(--accent1);
-        color: #fff;
-      }
-      #btn-back {
-        background: #e0e0e0;
-        color: var(--text-dark);
-      }
-      #btn-speed {
-        background: var(--accent5);
-        color: #fff;
-      }
+  /* ── CONTROLES DE FRASE ── */
+  #controls {
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .ctrl-btn {
+    flex: 1;
+    min-width: 120px;
+    padding: 14px 10px;
+    border: none;
+    border-radius: var(--radius);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: transform 0.12s, box-shadow 0.12s;
+    box-shadow: var(--shadow);
+  }
+  .ctrl-btn:active { transform: scale(0.95); }
+  #btn-speak  { background: var(--accent3); color: #fff; font-size: 1.1rem; }
+  #btn-clear  { background: var(--accent1); color: #fff; }
+  #btn-back   { background: #e0e0e0; color: var(--text-dark); }
+  #btn-speed  { background: var(--accent5); color: #fff; }
 
-      /* ── CATEGORÍAS ── */
-      #cat-tabs {
-        width: 100%;
-        max-width: 900px;
-        display: flex;
-        gap: 8px;
-        overflow-x: auto;
-        padding-bottom: 4px;
-        scrollbar-width: none;
-      }
-      #cat-tabs::-webkit-scrollbar {
-        display: none;
-      }
-      .cat-tab {
-        flex-shrink: 0;
-        padding: 10px 18px;
-        border-radius: 50px;
-        border: 3px solid transparent;
-        background: var(--card);
-        font-family: "Nunito", sans-serif;
-        font-weight: 900;
-        font-size: 0.95rem;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-        transition: all 0.15s;
-        color: var(--text-dark);
-      }
-      .cat-tab.active,
-      .cat-tab:hover {
-        transform: translateY(-2px);
-      }
+  /* ── CATEGORÍAS ── */
+  #cat-tabs {
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+  #cat-tabs::-webkit-scrollbar { display: none; }
+  .cat-tab {
+    flex-shrink: 0;
+    padding: 10px 18px;
+    border-radius: 50px;
+    border: 3px solid transparent;
+    background: var(--card);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 0.95rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    transition: all 0.15s;
+    color: var(--text-dark);
+  }
+  .cat-tab.active, .cat-tab:hover {
+    transform: translateY(-2px);
+  }
 
-      /* ── GRID DE PICTOGRAMAS ── */
-      #grid {
-        width: 100%;
-        max-width: 900px;
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-        gap: 14px;
-      }
+  /* ── GRID DE PICTOGRAMAS ── */
+  #grid {
+    width: 100%;
+    max-width: 900px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 14px;
+  }
 
-      .pic-card {
-        background: var(--card);
-        border-radius: var(--radius);
-        padding: 18px 10px 14px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 10px;
-        cursor: pointer;
-        box-shadow: var(--shadow);
-        border: 3px solid transparent;
-        transition:
-          transform 0.15s,
-          box-shadow 0.15s,
-          border-color 0.15s;
-        user-select: none;
-        -webkit-tap-highlight-color: transparent;
-      }
-      .pic-card:hover {
-        transform: translateY(-4px) scale(1.03);
-        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
-      }
-      .pic-card:active {
-        transform: scale(0.95);
-      }
-      .pic-card .emoji {
-        font-size: 3rem;
-        line-height: 1;
-      }
-      .pic-card .label {
-        font-family: "Nunito", sans-serif;
-        font-weight: 900;
-        font-size: 0.95rem;
-        text-align: center;
-        color: var(--text-dark);
-        line-height: 1.2;
-      }
+  .pic-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 18px 10px 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    border: 3px solid transparent;
+    transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .pic-card:hover  { transform: translateY(-4px) scale(1.03); box-shadow: 0 12px 32px rgba(0,0,0,0.16); }
+  .pic-card:active { transform: scale(0.95); }
+  .pic-card .emoji { font-size: 3rem; line-height: 1; }
+  .pic-card .label {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 0.95rem;
+    text-align: center;
+    color: var(--text-dark);
+    line-height: 1.2;
+  }
 
-      /* colores por categoría */
-      .cat-0 {
-        border-color: #ff6b6b22;
-      }
-      .cat-0:hover,
-      .cat-0.selected {
-        border-color: var(--accent1);
-        background: #fff0f0;
-      }
-      .cat-1 {
-        border-color: #ffd93d22;
-      }
-      .cat-1:hover,
-      .cat-1.selected {
-        border-color: var(--accent2);
-        background: #fffbea;
-      }
-      .cat-2 {
-        border-color: #6bcb7722;
-      }
-      .cat-2:hover,
-      .cat-2.selected {
-        border-color: var(--accent3);
-        background: #f0fff4;
-      }
-      .cat-3 {
-        border-color: #4d96ff22;
-      }
-      .cat-3:hover,
-      .cat-3.selected {
-        border-color: var(--accent4);
-        background: #f0f6ff;
-      }
-      .cat-4 {
-        border-color: #ff9f4522;
-      }
-      .cat-4:hover,
-      .cat-4.selected {
-        border-color: var(--accent5);
-        background: #fff7f0;
-      }
-      .cat-5 {
-        border-color: #c77dff22;
-      }
-      .cat-5:hover,
-      .cat-5.selected {
-        border-color: var(--accent6);
-        background: #faf0ff;
-      }
+  /* colores por categoría */
+  .cat-0 { border-color: #FF6B6B22; } .cat-0:hover, .cat-0.selected { border-color: var(--accent1); background: #FFF0F0; }
+  .cat-1 { border-color: #FFD93D22; } .cat-1:hover, .cat-1.selected { border-color: var(--accent2); background: #FFFBEA; }
+  .cat-2 { border-color: #6BCB7722; } .cat-2:hover, .cat-2.selected { border-color: var(--accent3); background: #F0FFF4; }
+  .cat-3 { border-color: #4D96FF22; } .cat-3:hover, .cat-3.selected { border-color: var(--accent4); background: #F0F6FF; }
+  .cat-4 { border-color: #FF9F4522; } .cat-4:hover, .cat-4.selected { border-color: var(--accent5); background: #FFF7F0; }
+  .cat-5 { border-color: #C77DFF22; } .cat-5:hover, .cat-5.selected { border-color: var(--accent6); background: #FAF0FF; }
+  .cat-6 { border-color: #00C9A722; } .cat-6:hover, .cat-6.selected { border-color: #00C9A7; background: #F0FFFC; }
 
-      /* ── FEEDBACK FLASH ── */
-      .flash {
-        animation: flash 0.35s ease;
+  /* ── MODO MATEMÁTICAS ── */
+  #math-game {
+    width: 100%;
+    max-width: 900px;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+  #math-game.active { display: flex; }
+  #math-question {
+    background: #1A1A2E;
+    color: #fff;
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 2.8rem;
+    text-align: center;
+    width: 100%;
+    box-shadow: var(--shadow);
+    letter-spacing: -1px;
+  }
+  #math-question .q-emoji { font-size: 2rem; display: block; margin-bottom: 8px; }
+  #math-answers {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    width: 100%;
+  }
+  .math-ans {
+    background: #fff;
+    border: 3px solid transparent;
+    border-radius: var(--radius);
+    padding: 22px 10px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 2rem;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: transform 0.15s, border-color 0.15s;
+    color: var(--text-dark);
+  }
+  .math-ans:hover  { transform: scale(1.04); border-color: #00C9A7; }
+  .math-ans:active { transform: scale(0.95); }
+  .math-ans.correct { background: #6BCB77; color: #fff; border-color: #6BCB77; animation: popIn 0.3s; }
+  .math-ans.wrong   { background: #FF6B6B; color: #fff; border-color: #FF6B6B; animation: shake 0.4s; }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20%      { transform: translateX(-10px); }
+    60%      { transform: translateX(10px); }
+  }
+  #math-score {
+    display: flex;
+    gap: 16px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 1rem;
+  }
+  .score-box {
+    background: #fff;
+    border-radius: 50px;
+    padding: 8px 20px;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  #math-mode-tabs {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .mode-tab {
+    padding: 10px 20px;
+    border-radius: 50px;
+    border: 3px solid #e0e0e0;
+    background: #fff;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--text-dark);
+  }
+  .mode-tab.active { background: #00C9A7; color: #fff; border-color: #00C9A7; }
+  #math-feedback {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 1.8rem;
+    min-height: 48px;
+    text-align: center;
+    transition: opacity 0.3s;
+  }
+
+  /* ── FEEDBACK FLASH ── */
+  .flash {
+    animation: flash 0.35s ease;
+  }
+  @keyframes flash {
+    0%   { background: #FFD93D; }
+    100% { background: var(--card); }
+  }
+
+  /* ── SPEED BADGE ── */
+  #speed-badge {
+    font-size: 0.75rem;
+    background: rgba(0,0,0,0.15);
+    padding: 2px 8px;
+    border-radius: 50px;
+    color: #fff;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    font-size: 0.75rem;
+    color: #aaa;
+    padding-bottom: 8px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 480px) {
+    #grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; }
+    .pic-card .emoji { font-size: 2.4rem; }
+    .pic-card { padding: 14px 8px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div>
+    <div class="logo">Mi <span>Voz</span> 🗣️</div>
+    <div class="subtitle">Toca las imágenes para hablar</div>
+  </div>
+</header>
+
+<!-- BARRA DE FRASE -->
+<div id="phrase-bar">
+  <span class="placeholder" id="placeholder-text">Toca algo para empezar… 👆</span>
+</div>
+
+<!-- CONTROLES -->
+<div id="controls">
+  <button class="ctrl-btn" id="btn-speak" onclick="speakPhrase()">🔊 Hablar</button>
+  <button class="ctrl-btn" id="btn-back"  onclick="removeLastWord()">⬅️ Borrar</button>
+  <button class="ctrl-btn" id="btn-clear" onclick="clearPhrase()">🗑️ Todo</button>
+  <button class="ctrl-btn" id="btn-speed" onclick="cycleSpeed()">🐢 Lento <span id="speed-badge">Lento</span></button>
+</div>
+
+<!-- CATEGORÍAS -->
+<div id="cat-tabs"></div>
+
+<!-- GRID -->
+<div id="grid"></div>
+
+<!-- MODO MATEMÁTICAS -->
+<div id="math-game">
+  <div id="math-mode-tabs">
+    <button class="mode-tab active" onclick="setMathMode('contar')">🔢 Contar</button>
+    <button class="mode-tab" onclick="setMathMode('sumas')">➕ Sumas</button>
+    <button class="mode-tab" onclick="setMathMode('formas')">🔴 Formas</button>
+  </div>
+  <div id="math-score">
+    <div class="score-box">⭐ <span id="score-correct">0</span> correctas</div>
+    <div class="score-box">🎯 <span id="score-streak">0</span> seguidas</div>
+  </div>
+  <div id="math-question"><span class="q-emoji" id="q-emoji">🔢</span><span id="q-text">Cargando...</span></div>
+  <div id="math-feedback"></div>
+  <div id="math-answers"></div>
+</div>
+
+<footer>Mi Voz AAC · Español · 2026</footer>
+
+<script>
+/* ────────── DATOS ────────── */
+const categories = [
+  {
+    name: "Yo quiero", emoji: "🙋", color: 0,
+    words: [
+      { emoji: "🍎", label: "manzana" },
+      { emoji: "🍌", label: "plátano" },
+      { emoji: "🍕", label: "pizza" },
+      { emoji: "🥤", label: "agua" },
+      { emoji: "🧃", label: "jugo" },
+      { emoji: "🍫", label: "chocolate" },
+      { emoji: "🍪", label: "galleta" },
+      { emoji: "🥛", label: "leche" },
+      { emoji: "🌮", label: "taco" },
+      { emoji: "🍦", label: "helado" },
+    ]
+  },
+  {
+    name: "Me siento", emoji: "😊", color: 1,
+    words: [
+      { emoji: "😊", label: "feliz" },
+      { emoji: "😢", label: "triste" },
+      { emoji: "😡", label: "enojado" },
+      { emoji: "😨", label: "asustado" },
+      { emoji: "😴", label: "cansado" },
+      { emoji: "🤢", label: "mal" },
+      { emoji: "🤩", label: "emocionado" },
+      { emoji: "😰", label: "nervioso" },
+      { emoji: "🥰", label: "bien" },
+      { emoji: "😣", label: "dolor" },
+    ]
+  },
+  {
+    name: "Lugares", emoji: "🏠", color: 2,
+    words: [
+      { emoji: "🏠", label: "casa" },
+      { emoji: "🏫", label: "escuela" },
+      { emoji: "🚽", label: "baño" },
+      { emoji: "🛏️", label: "cuarto" },
+      { emoji: "🍽️", label: "comedor" },
+      { emoji: "🌳", label: "parque" },
+      { emoji: "🏥", label: "doctor" },
+      { emoji: "🛒", label: "tienda" },
+      { emoji: "🚗", label: "carro" },
+      { emoji: "⛪", label: "iglesia" },
+    ]
+  },
+  {
+    name: "Acciones", emoji: "🏃", color: 3,
+    words: [
+      { emoji: "😴", label: "dormir" },
+      { emoji: "🍽️", label: "comer" },
+      { emoji: "🎮", label: "jugar" },
+      { emoji: "📚", label: "leer" },
+      { emoji: "✏️", label: "dibujar" },
+      { emoji: "🚶", label: "caminar" },
+      { emoji: "🛁", label: "bañar" },
+      { emoji: "📺", label: "ver tele" },
+      { emoji: "🎵", label: "música" },
+      { emoji: "🤝", label: "ayuda" },
+    ]
+  },
+  {
+    name: "Personas", emoji: "👨‍👩‍👧", color: 4,
+    words: [
+      { emoji: "👩", label: "mamá" },
+      { emoji: "👨", label: "papá" },
+      { emoji: "👧", label: "hermana" },
+      { emoji: "👦", label: "hermano" },
+      { emoji: "👴", label: "abuelo" },
+      { emoji: "👵", label: "abuela" },
+      { emoji: "👩‍🏫", label: "maestra" },
+      { emoji: "👨‍⚕️", label: "doctor" },
+      { emoji: "👫", label: "amigo" },
+      { emoji: "🧒", label: "yo" },
+    ]
+  },
+  {
+    name: "Frases", emoji: "💬", color: 5,
+    words: [
+      { emoji: "✅", label: "sí" },
+      { emoji: "❌", label: "no" },
+      { emoji: "🙏", label: "por favor" },
+      { emoji: "🤗", label: "gracias" },
+      { emoji: "👋", label: "hola" },
+      { emoji: "👋", label: "adiós" },
+      { emoji: "❓", label: "¿qué?" },
+      { emoji: "📍", label: "aquí" },
+      { emoji: "🔁", label: "otra vez" },
+      { emoji: "⏸️", label: "espera" },
+    ]
+  },
+  {
+    name: "Matemáticas", emoji: "🔢", color: 6,
+    isMath: true,
+    words: []
+  },
+];
+
+/* ────────── ESTADO ────────── */
+let phrase = [];           // { emoji, label }[]
+let currentCat = 0;
+let speechRate = 0.7;      // Lento por defecto (bueno para autismo)
+const speedLevels = [
+  { rate: 0.7, label: "Lento" },
+  { rate: 0.9, label: "Normal" },
+  { rate: 1.1, label: "Rápido" },
+];
+let speedIdx = 0;
+
+/* ────────── RENDER CATEGORÍAS ────────── */
+function renderCats() {
+  const tabs = document.getElementById('cat-tabs');
+  tabs.innerHTML = '';
+  categories.forEach((cat, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'cat-tab' + (i === currentCat ? ' active' : '');
+    btn.style.borderColor = i === currentCat ? getCatColor(cat.color) : 'transparent';
+    btn.innerHTML = `${cat.emoji} ${cat.name}`;
+    btn.onclick = () => { currentCat = i; renderCats(); renderGrid(); };
+    tabs.appendChild(btn);
+  });
+}
+
+function getCatColor(idx) {
+  const colors = ['#FF6B6B','#FFD93D','#6BCB77','#4D96FF','#FF9F45','#C77DFF'];
+  return colors[idx] || '#ccc';
+}
+
+/* ────────── RENDER GRID ────────── */
+function renderGrid() {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  const cat = categories[currentCat];
+  cat.words.forEach(word => {
+    const card = document.createElement('div');
+    card.className = `pic-card cat-${cat.color}`;
+    card.innerHTML = `<div class="emoji">${word.emoji}</div><div class="label">${word.label}</div>`;
+    card.onclick = () => addWord(word, card);
+    grid.appendChild(card);
+  });
+}
+
+/* ────────── FRASE ────────── */
+function renderPhrase() {
+  const bar = document.getElementById('phrase-bar');
+  const placeholder = document.getElementById('placeholder-text');
+
+  // limpiar chips anteriores
+  bar.querySelectorAll('.word-chip').forEach(c => c.remove());
+
+  if (phrase.length === 0) {
+    placeholder.style.display = 'block';
+    return;
+  }
+  placeholder.style.display = 'none';
+
+  phrase.forEach((w, i) => {
+    const chip = document.createElement('div');
+    chip.className = 'word-chip';
+    chip.innerHTML = `<span class="chip-emoji">${w.emoji}</span>${w.label}`;
+    chip.onclick = () => { phrase.splice(i, 1); renderPhrase(); };
+    bar.appendChild(chip);
+  });
+}
+
+function addWord(word, cardEl) {
+  phrase.push(word);
+  renderPhrase();
+  // flash visual en la card
+  cardEl.classList.add('selected', 'flash');
+  setTimeout(() => cardEl.classList.remove('flash'), 400);
+  // speak word solo
+  speakText(word.label);
+}
+
+function removeLastWord() {
+  phrase.pop();
+  renderPhrase();
+}
+
+function clearPhrase() {
+  phrase = [];
+  renderPhrase();
+}
+
+/* ────────── TTS ────────── */
+function speakText(text) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'es-MX';
+  utter.rate = speechRate;
+  utter.pitch = 1.1;
+  utter.volume = 1;
+  // Intentar voz española
+  const voices = window.speechSynthesis.getVoices();
+  const esVoice = voices.find(v => v.lang.startsWith('es')) || null;
+  if (esVoice) utter.voice = esVoice;
+  window.speechSynthesis.speak(utter);
+}
+
+function speakPhrase() {
+  if (phrase.length === 0) { speakText('Toca algo para hablar'); return; }
+  const text = phrase.map(w => w.label).join(' ');
+  speakText(text);
+  // animación barra
+  const bar = document.getElementById('phrase-bar');
+  bar.style.background = '#4D96FF';
+  setTimeout(() => bar.style.background = '', 600);
+}
+
+/* ────────── VELOCIDAD ────────── */
+function cycleSpeed() {
+  speedIdx = (speedIdx + 1) % speedLevels.length;
+  const lvl = speedLevels[speedIdx];
+  speechRate = lvl.rate;
+  document.getElementById('speed-badge').textContent = lvl.label;
+  speakText('Velocidad ' + lvl.label);
+}
+
+/* ────────── RENDER GRID con detección MATH ────────── */
+const _renderGridOrig = renderGrid;
+renderGrid = function() {
+  const cat = categories[currentCat];
+  const mathGame = document.getElementById('math-game');
+  const grid     = document.getElementById('grid');
+  const controls = document.getElementById('controls');
+  const phraseBar= document.getElementById('phrase-bar');
+  if (cat.isMath) {
+    grid.style.display     = 'none';
+    phraseBar.style.display= 'none';
+    controls.style.display = 'none';
+    mathGame.classList.add('active');
+    startMathGame();
+  } else {
+    grid.style.display     = '';
+    phraseBar.style.display= '';
+    controls.style.display = '';
+    mathGame.classList.remove('active');
+    _renderGridOrig();
+  }
+};
+
+/* ────────── MATEMÁTICAS ────────── */
+let mathMode    = 'contar';
+let mathCorrect = 0;
+let mathStreak  = 0;
+let mathAnswer  = 0;
+
+const SHAPES = [
+  { emoji:'🔴', name:'círculo' },
+  { emoji:'🟦', name:'cuadrado' },
+  { emoji:'🔺', name:'triángulo' },
+  { emoji:'🟢', name:'círculo verde' },
+  { emoji:'⭐', name:'estrella' },
+  { emoji:'🟣', name:'óvalo' },
+];
+
+const NUM_EMOJIS = ['0️⃣','1️⃣','2️⃣','3️⃣','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟'];
+
+function setMathMode(mode) {
+  mathMode = mode;
+  document.querySelectorAll('.mode-tab').forEach((t,i) => {
+    t.classList.toggle('active', ['contar','sumas','formas'][i] === mode);
+  });
+  startMathGame();
+}
+
+function startMathGame() {
+  const fb = document.getElementById('math-feedback');
+  fb.textContent = '';
+  if (mathMode === 'contar')  genContar();
+  if (mathMode === 'sumas')   genSumas();
+  if (mathMode === 'formas')  genFormas();
+}
+
+function genContar() {
+  const n = Math.floor(Math.random() * 9) + 1; // 1-9
+  mathAnswer = n;
+  const objetos = ['🍎','🌟','🐱','🐶','🍌','🎈','🦋','⚽','🍭'];
+  const obj = objetos[Math.floor(Math.random() * objetos.length)];
+  document.getElementById('q-emoji').textContent = obj.repeat(n);
+  document.getElementById('q-text').textContent  = '¿Cuántos hay?';
+  speakText('Cuántos hay');
+  renderAnswers(n, 1, 10);
+}
+
+function genSumas() {
+  const a = Math.floor(Math.random() * 5) + 1;
+  const b = Math.floor(Math.random() * 5) + 1;
+  mathAnswer = a + b;
+  document.getElementById('q-emoji').textContent = NUM_EMOJIS[a] + ' ➕ ' + NUM_EMOJIS[b];
+  document.getElementById('q-text').textContent  = `${a} + ${b} = ?`;
+  speakText(`Cuánto es ${a} más ${b}`);
+  renderAnswers(a + b, 1, 10);
+}
+
+function genFormas() {
+  const s = SHAPES[Math.floor(Math.random() * SHAPES.length)];
+  mathAnswer = s.name;
+  document.getElementById('q-emoji').textContent = s.emoji;
+  document.getElementById('q-text').textContent  = '¿Qué forma es?';
+  speakText('Qué forma es esta');
+  // respuestas con formas
+  const wrong = SHAPES.filter(x => x.name !== s.name)
+    .sort(() => Math.random()-0.5).slice(0,3);
+  const opts  = [...wrong, s].sort(() => Math.random()-0.5);
+  const cont  = document.getElementById('math-answers');
+  cont.innerHTML = '';
+  opts.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'math-ans';
+    btn.innerHTML = `${opt.emoji}<br><span style="font-size:1rem">${opt.name}</span>`;
+    btn.onclick = () => checkAnswer(opt.name, btn);
+    cont.appendChild(btn);
+  });
+}
+
+function renderAnswers(correct, min, max) {
+  const opts = new Set([correct]);
+  while (opts.size < 4) {
+    opts.add(Math.floor(Math.random() * (max - min + 1)) + min);
+  }
+  const arr = [...opts].sort(() => Math.random() - 0.5);
+  const cont = document.getElementById('math-answers');
+  cont.innerHTML = '';
+  arr.forEach(val => {
+    const btn = document.createElement('button');
+    btn.className = 'math-ans';
+    btn.textContent = val;
+    btn.onclick = () => checkAnswer(val, btn);
+    cont.appendChild(btn);
+  });
+}
+
+function checkAnswer(val, btn) {
+  const correct = val == mathAnswer;
+  btn.classList.add(correct ? 'correct' : 'wrong');
+  document.querySelectorAll('.math-ans').forEach(b => b.onclick = null);
+
+  const fb = document.getElementById('math-feedback');
+  if (correct) {
+    mathCorrect++;
+    mathStreak++;
+    const cheers = ['¡Muy bien! 🎉','¡Excelente! ⭐','¡Correcto! 🏆','¡Súper! 🌟','¡Lo lograste! 🎊'];
+    fb.textContent = cheers[Math.floor(Math.random() * cheers.length)];
+    speakText(cheers[Math.floor(Math.random() * cheers.length)]);
+  } else {
+    mathStreak = 0;
+    fb.textContent = '¡Inténtalo de nuevo! 💪';
+    speakText('Inténtalo de nuevo');
+    // mostrar correcta
+    document.querySelectorAll('.math-ans').forEach(b => {
+      if (b.textContent == mathAnswer || b.textContent.includes(mathAnswer)) {
+        b.classList.add('correct');
       }
-      @keyframes flash {
-        0% {
-          background: #ffd93d;
-        }
-        100% {
-          background: var(--card);
-        }
-      }
+    });
+  }
 
-      /* ── SPEED BADGE ── */
-      #speed-badge {
-        font-size: 0.75rem;
-        background: rgba(0, 0, 0, 0.15);
-        padding: 2px 8px;
-        border-radius: 50px;
-        color: #fff;
-      }
+  document.getElementById('score-correct').textContent = mathCorrect;
+  document.getElementById('score-streak').textContent  = mathStreak;
 
-      /* ── FOOTER ── */
-      footer {
-        font-size: 0.75rem;
-        color: #aaa;
-        padding-bottom: 8px;
-        font-weight: 600;
-        letter-spacing: 0.5px;
-      }
+  setTimeout(() => { startMathGame(); }, 1800);
+}
 
-      /* ── RESPONSIVE ── */
-      @media (max-width: 480px) {
-        #grid {
-          grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-          gap: 10px;
-        }
-        .pic-card .emoji {
-          font-size: 2.4rem;
-        }
-        .pic-card {
-          padding: 14px 8px 10px;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <!-- HEADER -->
-    <header>
-      <div>
-        <div class="logo">Mi <span>Voz</span> 🗣️</div>
-        <div class="subtitle">Toca las imágenes para hablar</div>
-      </div>
-    </header>
-
-    <!-- BARRA DE FRASE -->
-    <div id="phrase-bar">
-      <span class="placeholder" id="placeholder-text"
-        >Toca algo para empezar… 👆</span
-      >
-    </div>
-
-    <!-- CONTROLES -->
-    <div id="controls">
-      <button class="ctrl-btn" id="btn-speak" onclick="speakPhrase()">
-        🔊 Hablar
-      </button>
-      <button class="ctrl-btn" id="btn-back" onclick="removeLastWord()">
-        ⬅️ Borrar
-      </button>
-      <button class="ctrl-btn" id="btn-clear" onclick="clearPhrase()">
-        🗑️ Todo
-      </button>
-      <button class="ctrl-btn" id="btn-speed" onclick="cycleSpeed()">
-        🐢 Lento <span id="speed-badge">Lento</span>
-      </button>
-    </div>
-
-    <!-- CATEGORÍAS -->
-    <div id="cat-tabs"></div>
-
-    <!-- GRID -->
-    <div id="grid"></div>
-
-    <footer>Mi Voz AAC · Español · 2026</footer>
-
-    <script>
-      /* ────────── DATOS ────────── */
-      const categories = [
-        {
-          name: "Yo quiero",
-          emoji: "🙋",
-          color: 0,
-          words: [
-            { emoji: "🍎", label: "manzana" },
-            { emoji: "🍌", label: "plátano" },
-            { emoji: "🍕", label: "pizza" },
-            { emoji: "🥤", label: "agua" },
-            { emoji: "🧃", label: "jugo" },
-            { emoji: "🍫", label: "chocolate" },
-            { emoji: "🍪", label: "galleta" },
-            { emoji: "🥛", label: "leche" },
-            { emoji: "🌮", label: "taco" },
-            { emoji: "🍦", label: "helado" },
-          ],
-        },
-        {
-          name: "Me siento",
-          emoji: "😊",
-          color: 1,
-          words: [
-            { emoji: "😊", label: "feliz" },
-            { emoji: "😢", label: "triste" },
-            { emoji: "😡", label: "enojado" },
-            { emoji: "😨", label: "asustado" },
-            { emoji: "😴", label: "cansado" },
-            { emoji: "🤢", label: "mal" },
-            { emoji: "🤩", label: "emocionado" },
-            { emoji: "😰", label: "nervioso" },
-            { emoji: "🥰", label: "bien" },
-            { emoji: "😣", label: "dolor" },
-          ],
-        },
-        {
-          name: "Lugares",
-          emoji: "🏠",
-          color: 2,
-          words: [
-            { emoji: "🏠", label: "casa" },
-            { emoji: "🏫", label: "escuela" },
-            { emoji: "🚽", label: "baño" },
-            { emoji: "🛏️", label: "cuarto" },
-            { emoji: "🍽️", label: "comedor" },
-            { emoji: "🌳", label: "parque" },
-            { emoji: "🏥", label: "doctor" },
-            { emoji: "🛒", label: "tienda" },
-            { emoji: "🚗", label: "carro" },
-            { emoji: "⛪", label: "iglesia" },
-          ],
-        },
-        {
-          name: "Acciones",
-          emoji: "🏃",
-          color: 3,
-          words: [
-            { emoji: "😴", label: "dormir" },
-            { emoji: "🍽️", label: "comer" },
-            { emoji: "🎮", label: "jugar" },
-            { emoji: "📚", label: "leer" },
-            { emoji: "✏️", label: "dibujar" },
-            { emoji: "🚶", label: "caminar" },
-            { emoji: "🛁", label: "bañar" },
-            { emoji: "📺", label: "ver tele" },
-            { emoji: "🎵", label: "música" },
-            { emoji: "🤝", label: "ayuda" },
-          ],
-        },
-        {
-          name: "Personas",
-          emoji: "👨‍👩‍👧",
-          color: 4,
-          words: [
-            { emoji: "👩", label: "mamá" },
-            { emoji: "👨", label: "papá" },
-            { emoji: "👧", label: "hermana" },
-            { emoji: "👦", label: "hermano" },
-            { emoji: "👴", label: "abuelo" },
-            { emoji: "👵", label: "abuela" },
-            { emoji: "🧔", label: "tío" },
-            { emoji: "👩‍🦱", label: "tía" },
-            { emoji: "👩‍🏫", label: "maestra" },
-            { emoji: "👨‍⚕️", label: "doctor" },
-            { emoji: "👫", label: "amigo" },
-            { emoji: "🧒", label: "yo" },
-          ],
-        },
-        {
-          name: "Frases",
-          emoji: "💬",
-          color: 5,
-          words: [
-            { emoji: "✅", label: "sí" },
-            { emoji: "❌", label: "no" },
-            { emoji: "🙏", label: "por favor" },
-            { emoji: "🤗", label: "gracias" },
-            { emoji: "👋", label: "hola" },
-            { emoji: "👋", label: "adiós" },
-            { emoji: "❓", label: "¿qué?" },
-            { emoji: "📍", label: "aquí" },
-            { emoji: "🔁", label: "otra vez" },
-            { emoji: "⏸️", label: "espera" },
-          ],
-        },
-      ];
-
-      /* ────────── ESTADO ────────── */
-      let phrase = []; // { emoji, label }[]
-      let currentCat = 0;
-      let speechRate = 0.7; // Lento por defecto (bueno para autismo)
-      const speedLevels = [
-        { rate: 0.7, label: "Lento" },
-        { rate: 0.9, label: "Normal" },
-        { rate: 1.1, label: "Rápido" },
-      ];
-      let speedIdx = 0;
-
-      /* ────────── RENDER CATEGORÍAS ────────── */
-      function renderCats() {
-        const tabs = document.getElementById("cat-tabs");
-        tabs.innerHTML = "";
-        categories.forEach((cat, i) => {
-          const btn = document.createElement("button");
-          btn.className = "cat-tab" + (i === currentCat ? " active" : "");
-          btn.style.borderColor =
-            i === currentCat ? getCatColor(cat.color) : "transparent";
-          btn.innerHTML = `${cat.emoji} ${cat.name}`;
-          btn.onclick = () => {
-            currentCat = i;
-            renderCats();
-            renderGrid();
-          };
-          tabs.appendChild(btn);
-        });
-      }
-
-      function getCatColor(idx) {
-        const colors = [
-          "#FF6B6B",
-          "#FFD93D",
-          "#6BCB77",
-          "#4D96FF",
-          "#FF9F45",
-          "#C77DFF",
-        ];
-        return colors[idx] || "#ccc";
-      }
-
-      /* ────────── RENDER GRID ────────── */
-      function renderGrid() {
-        const grid = document.getElementById("grid");
-        grid.innerHTML = "";
-        const cat = categories[currentCat];
-        cat.words.forEach((word) => {
-          const card = document.createElement("div");
-          card.className = `pic-card cat-${cat.color}`;
-          card.innerHTML = `<div class="emoji">${word.emoji}</div><div class="label">${word.label}</div>`;
-          card.onclick = () => addWord(word, card);
-          grid.appendChild(card);
-        });
-      }
-
-      /* ────────── FRASE ────────── */
-      function renderPhrase() {
-        const bar = document.getElementById("phrase-bar");
-        const placeholder = document.getElementById("placeholder-text");
-
-        // limpiar chips anteriores
-        bar.querySelectorAll(".word-chip").forEach((c) => c.remove());
-
-        if (phrase.length === 0) {
-          placeholder.style.display = "block";
-          return;
-        }
-        placeholder.style.display = "none";
-
-        phrase.forEach((w, i) => {
-          const chip = document.createElement("div");
-          chip.className = "word-chip";
-          chip.innerHTML = `<span class="chip-emoji">${w.emoji}</span>${w.label}`;
-          chip.onclick = () => {
-            phrase.splice(i, 1);
-            renderPhrase();
-          };
-          bar.appendChild(chip);
-        });
-      }
-
-      function addWord(word, cardEl) {
-        phrase.push(word);
-        renderPhrase();
-        // flash visual en la card
-        cardEl.classList.add("selected", "flash");
-        setTimeout(() => cardEl.classList.remove("flash"), 400);
-        // speak word solo
-        speakText(word.label);
-      }
-
-      function removeLastWord() {
-        phrase.pop();
-        renderPhrase();
-      }
-
-      function clearPhrase() {
-        phrase = [];
-        renderPhrase();
-      }
-
-      /* ────────── TTS ────────── */
-      function speakText(text) {
-        if (!window.speechSynthesis) return;
-        window.speechSynthesis.cancel();
-        const utter = new SpeechSynthesisUtterance(text);
-        utter.lang = "es-MX";
-        utter.rate = speechRate;
-        utter.pitch = 1.1;
-        utter.volume = 1;
-        // Intentar voz española
-        const voices = window.speechSynthesis.getVoices();
-        const esVoice = voices.find((v) => v.lang.startsWith("es")) || null;
-        if (esVoice) utter.voice = esVoice;
-        window.speechSynthesis.speak(utter);
-      }
-
-      function speakPhrase() {
-        if (phrase.length === 0) {
-          speakText("Toca algo para hablar");
-          return;
-        }
-        const text = phrase.map((w) => w.label).join(" ");
-        speakText(text);
-        // animación barra
-        const bar = document.getElementById("phrase-bar");
-        bar.style.background = "#4D96FF";
-        setTimeout(() => (bar.style.background = ""), 600);
-      }
-
-      /* ────────── VELOCIDAD ────────── */
-      function cycleSpeed() {
-        speedIdx = (speedIdx + 1) % speedLevels.length;
-        const lvl = speedLevels[speedIdx];
-        speechRate = lvl.rate;
-        document.getElementById("speed-badge").textContent = lvl.label;
-        speakText("Velocidad " + lvl.label);
-      }
-
-      /* ────────── INIT ────────── */
-      window.speechSynthesis.onvoiceschanged = () => {}; // preload voices
-      renderCats();
-      renderGrid();
-      renderPhrase();
-    </script>
-    <script>
-      if ("serviceWorker" in navigator) {
-        navigator.serviceWorker
-          .register("./sw.js")
-          .then(() => console.log("SW registrado ✅"))
-          .catch((e) => console.warn("SW error:", e));
-      }
-    </script>
-  </body>
+/* ────────── INIT ────────── */
+window.speechSynthesis.onvoiceschanged = () => {}; // preload voices
+renderCats();
+renderGrid();
+renderPhrase();
+</script>
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("./sw.js")
+    .then(() => console.log("SW registrado ✅"))
+    .catch(e => console.warn("SW error:", e));
+}
+</script>
+</body>
 </html>
